@@ -1,9 +1,10 @@
-import express from 'express';
+const express= require('express') ;
 const app = express();
 
-app.get('/',(req,res)=>{
-    res.end("social media app");
-})
+// to use routes
+app.use('/',require('./routes/index.js'));
+
+
 app.listen(5000, () => {
     console.log('Server started');
 });
