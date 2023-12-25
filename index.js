@@ -1,7 +1,7 @@
 const express= require('express') ;
 const app = express();
 
-// to use routes
+// to use index routes as base/starting route
 app.use('/',require('./routes/index.js'));
 
 
