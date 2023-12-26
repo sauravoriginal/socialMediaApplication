@@ -1,8 +1,13 @@
 const express= require('express') ;
 const expressEjsLayouts = require('express-ejs-layouts');
 const expressLayouts =require('express-ejs-layouts');
+const cookieParser = require('cookie-parser');
+
 const db =require('./config/mongoose.js');
 const app = express();
+//for cookie parser
+app.use(express.urlencoded());
+app.use(cookieParser());
 
 //// before routes i.e before views we need static files to be accessed
 app.use(express.static('./assets'));

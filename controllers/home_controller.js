@@ -1,4 +1,5 @@
 module .exports.home =async (req,res)=>{
+    console.log(req.cookie);
     // return res.end("Social. media app");
     return res.render('home.ejs',{
          title: "Home"
