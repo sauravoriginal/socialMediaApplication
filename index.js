@@ -1,9 +1,16 @@
 const express= require('express') ;
 const expressEjsLayouts = require('express-ejs-layouts');
-const app = express();
 const expressLayouts =require('express-ejs-layouts');
+const app = express();
+
+//// before routes i.e before views we need static files to be accessed
+app.use(express.static('./assets'));
 // before routes i.e before views we need layouts
 app.use(expressEjsLayouts);
+//extract the style from sub pages into layout
+app.set('layout extractStyles',true);
+app.set('layout extractScripts',true);
+
 // to use index routes as base/starting route
 app.use('/',require('./routes/index.js'));
 //setting up views using ejs
