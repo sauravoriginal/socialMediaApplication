@@ -26,5 +26,5 @@ app.set('views', './views'); // same as path.join for html page to send
 
 
 app.listen(5000, () => {
-    console.log('Server started');
+    console.log('Server started at http://localhost:5000');
 });

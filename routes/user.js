@@ -4,6 +4,8 @@ const router = express.Router();
 router.get('/profile',userController.profile);
 router.get('/sign-Up',userController.signUp);
 router.get('/sign-in',userController.signIn);
+// on form action sign up
+router.post('/create',userController.create);
 
 
 
