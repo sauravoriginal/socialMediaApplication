@@ -7,11 +7,19 @@ module .exports.profile =async (req,res)=>{
 
 // render sign up page
 module.exports.signUp = async (req,res)=>{
+    //if it is signed in it shouldn't open 'user_sign_up.ejs'
+    if(req.isAuthenticated()){
+      return res.redirect('/users/profile');
+    }
     return res.render('user_sign_up.ejs',{
         title: "Sign Up"
    });}
    // render sign in page
  module.exports.signIn = async (req,res)=>{
+     //if it is signed in it shouldn't open 'user_sign_in.ejs'
+     if(req.isAuthenticated()){
+       return res.redirect('/users/profile');
+      }
     return res.render('user_sign_in.ejs',{
         title: "Sign In"
    });}
@@ -45,7 +53,7 @@ module.exports.signUp = async (req,res)=>{
 
 // get the sign in data
 module.exports.createSession = async (req,res)=>{
-    // all funcionalities done by passport localStrategy
+    // all funcionalities done by passport localStrategy 
     return res.redirect('/');
 
 }
