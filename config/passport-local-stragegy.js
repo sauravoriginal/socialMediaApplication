@@ -6,7 +6,7 @@ passport.use(new LocalStrategy({
     usernameField:'email'
 },
 
-    async(email,passport,done)=>{
+    async(email,password,done)=>{
         try{
         // find a user and establish the identity
         const user =await User.findOne({ email: email });

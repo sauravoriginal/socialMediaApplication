@@ -45,6 +45,7 @@ module.exports.signUp = async (req,res)=>{
 
 // get the sign in data
 module.exports.createSession = async (req,res)=>{
-    return res.render('user_profile.ejs',{
-        title: "profile"
-   });}
+    // all funcionalities done by passport localStrategy
+    return res.redirect('/');
+
+}
