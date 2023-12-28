@@ -11,6 +11,8 @@ const session = require('express-session');
 const passport = require('passport');
 // import passport local starategey
 const passportLocal = require('./config/passport-local-stragegy.js');
+// import mongo store to reduce the session time out for cookie or server restart
+const MongoStore= require('connect-mongo');
 
 //for cookie parser
 app.use(express.urlencoded());
@@ -29,6 +31,7 @@ app.set('layout extractScripts',true);
 app.set('view engine','ejs');
 app.set('views', './views'); // same as path.join for html page to send
 
+//mongo store is used to store the session cookie in db
 //after we set the views -use passport middliware
 app.use(session({
     name:'codial',
@@ -38,7 +41,15 @@ app.use(session({
     resave:false,
     cookie:{
         maxAge:(1000 * 60 * 100)
-    }
+    },
+    store: new MongoStore(
+        {
+            mongoUrl: "mongodb://127.0.0.1:27017/social_media_app", // Specify your database name
+            collection: 'session', 
+
+            autoRemove:'disabled'
+        },(err)=>{console.log(err || 'connect-mongodb setup ok');}
+    )
 
 }));
 
