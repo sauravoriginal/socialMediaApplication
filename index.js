@@ -44,6 +44,8 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+// each time this middle ware need to run 
+app.use(passport.setAuthenticatedUser);
 // to use index routes as base/starting route
 app.use('/',require('./routes/index.js'));
 
