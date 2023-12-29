@@ -13,7 +13,16 @@ const passport = require('passport');
 const passportLocal = require('./config/passport-local-stragegy.js');
 // import mongo store to reduce the session time out for cookie or server restart
 const MongoStore= require('connect-mongo');
-
+// for saas middleware
+const sassMiddleware = require('node-sass-middleware');
+app.use(sassMiddleware({
+    /* Options */
+    src: '/assets/scss',
+    dest: '/assets/css',
+    debug:true,
+    outputStyle: 'extended',
+    prefix:'/css'
+}));
 //for cookie parser
 app.use(express.urlencoded());
 app.use(cookieParser());
