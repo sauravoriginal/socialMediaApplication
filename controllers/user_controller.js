@@ -57,3 +57,12 @@ module.exports.createSession = async (req,res)=>{
     return res.redirect('/');
 
 }
+
+// sign-out
+module.exports.destroySession = async(req,res,next)=>{
+    //function given by passport
+    req.logout((err)=>{
+        if(err){return next(err);}
+        return res.redirect('/');
+    });
+}
