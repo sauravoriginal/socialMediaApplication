@@ -10,13 +10,11 @@ const postSchema = new mongoose.Schema({
     ref:'User'
    },
    //add all  array of id's belongs to this post in postSchema itself
-   comment:[
-    {
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Comment'
-
-    }
-   ]
+   comments:[{
+    //it refer to one objectId
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment'  //refer to comment Schema
+}],
 
 },{
     timestamps:true
