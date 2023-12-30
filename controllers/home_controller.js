@@ -6,7 +6,16 @@ module .exports.home =async (req,res)=>{
     try{
         //populate the user of each post(by doing popultae 
         // we have whole user object instead of only userobejct id)
-        const posts = await Post.find({}).populate('user').exec();
+        const posts = await Post.find({})
+        .populate('user')
+        //populate comments and user of comment
+        .populate({
+             path:'comments',
+             populate: {
+                path:'user'
+             }
+        })
+       
         
         return res.render('home.ejs',{
             title: "Home",
