@@ -26,7 +26,7 @@ module.exports.signUp = async (req,res)=>{
    // get the sign up data
    module.exports.create = async (req,res)=>{
     try{
-        const {email,password} = req.body;
+        const {email,password,name} = req.body;
         console.log("name is",req.body.name);
         // check whether the confirm password are equal or not
         if(password != req.body.confirm_password){
@@ -34,7 +34,7 @@ module.exports.signUp = async (req,res)=>{
         }
         const userfound =await User.findOne({email});
         if(!userfound){
-           const user=await User.create({email,password}) ;
+           const user=await User.create({email,password,name}) ;
            return res.redirect('/users/sign-in');
         }
         //if user is already exist
