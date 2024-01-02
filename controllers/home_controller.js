@@ -1,4 +1,6 @@
 const Post = require('../models/post');
+const User = require('../models/user');
+
 module .exports.home =async (req,res)=>{
     // console.log(req.cookie);
     // res.cookie('user_id',25);
@@ -14,12 +16,16 @@ module .exports.home =async (req,res)=>{
              populate: {
                 path:'user'
              }
-        })
+        });
+        let users= await User.find({});
+
        
         
         return res.render('home.ejs',{
             title: "Home",
-            posts:posts
+            posts:posts,
+            all_users: users
+
        });  
     }catch(err){ 
         console.log("error in displaying post",err);
