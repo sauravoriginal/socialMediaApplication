@@ -15,6 +15,9 @@ const passportLocal = require('./config/passport-local-stragegy.js');
 const MongoStore= require('connect-mongo');
 // for saas middleware
 const sassMiddleware = require('node-sass-middleware');
+// import connect-flash 
+const flash = require('connect-flash');
+const customMware = require('./config/middleware.js');
 app.use(sassMiddleware({
     /* Options */
     src: './assets/scss',
@@ -66,6 +69,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 // each time this middle ware need to run 
 app.use(passport.setAuthenticatedUser);
+
+// after session is set and above the routes we use flash middleware
+app.use(flash());
+app.use(customMware.setFlash);
+
 // to use index routes as base/starting route
 app.use('/',require('./routes/index.js'));
 

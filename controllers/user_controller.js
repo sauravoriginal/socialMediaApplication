@@ -75,6 +75,7 @@ module.exports.signUp = async (req,res)=>{
 // get the sign in data
 module.exports.createSession = async (req,res)=>{
     // all funcionalities done by passport localStrategy 
+    req.flash('success','Logged in Successfully');
     return res.redirect('/');
 
 }
@@ -84,6 +85,8 @@ module.exports.destroySession = async(req,res,next)=>{
     //function given by passport
     req.logout((err)=>{
         if(err){return next(err);}
+        req.flash('success','You have Logged out!');
+
         return res.redirect('/');
     });
 }
