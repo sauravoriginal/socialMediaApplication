@@ -12,15 +12,15 @@ module .exports.create =async (req,res)=>{
                 content:req.body.content, 
                 post:req.body.post,
                 user:req.user._id
-            }
+              }
                 );
-                if(comment){
+                
                   // adding comment to the post
                   post.comments.push(comment); // given by mongodb
                   post.save();// is called whenever i am updating something   
-                  return res.redirect('back');
+                  return res.redirect('/');
 
-                }
+                
         }
         
     }catch(err){
@@ -45,15 +45,17 @@ module.exports.destroy =async(req,res)=>{
                 await comment.deleteOne(); // delete this comment
                 // delete comment id from array and update the post
                const post= await Post.findByIdAndUpdate(postId,{$pull:{comments:req.params.id}});
-              if(post){
-                return res.redirect('back');
-              }
-              return res.redirect('back'); //else
+             
+              
+              return res.redirect('back'); 
     
+              }else{
+                return res.redirect('back'); 
+
               }
            
         
-            return;
+           
     }catch(err){
         console.log("Error in deleting a comment",err);
 

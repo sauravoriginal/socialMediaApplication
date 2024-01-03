@@ -16,9 +16,9 @@ module .exports.profile =async (req,res)=>{
         if(req.user.id == req.params.id){
         // const {name,email} = req.body;
         const user = await User.findByIdAndUpdate(req.params.id,req.body);
-        if(user){
+       
            return res.redirect('back');
-        }
+        
     }
  }catch(err){
      console.log("Error in updating user profile",err);

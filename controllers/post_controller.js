@@ -19,11 +19,13 @@ module.exports.destroy =async(req,res)=>{
           if(post.user == req.user.id){
             await post.deleteOne();            // delete all comment associated with this post
            const isCommentDltd= await Comment.deleteMany({post: req.params.id});
-           if(isCommentDltd){
-            console.log("comment associated with post deleted");
+       
             return res.redirect('back');
             
-           }
+           
+
+          }else{
+            return res.redirect('back');
 
           }
     }catch(err){
