@@ -18,14 +18,19 @@ module .exports.create =async (req,res)=>{
                   // adding comment to the post
                   post.comments.push(comment); // given by mongodb
                   post.save();// is called whenever i am updating something   
+                  req.flash('success','Comment added sucessfully !');
                   return res.redirect('/');
 
                 
         }
+        req.flash('error','Error in adding Comment');
+        return res.redirect('/');
+
         
     }catch(err){
-        console.log("Error in creating comment",err);
-        return;
+        req.flash('error',err);
+        return res.redirect('/');
+        ;
     }
 
 }
@@ -45,11 +50,14 @@ module.exports.destroy =async(req,res)=>{
                 await comment.deleteOne(); // delete this comment
                 // delete comment id from array and update the post
                const post= await Post.findByIdAndUpdate(postId,{$pull:{comments:req.params.id}});
-             
+               req.flash('success','Comment deleted sucessfully !');
+
               
               return res.redirect('back'); 
     
               }else{
+                req.flash('error','You cannot delete this comment!');
+
                 return res.redirect('back'); 
 
               }
@@ -58,7 +66,9 @@ module.exports.destroy =async(req,res)=>{
            
     }catch(err){
         console.log("Error in deleting a comment",err);
+        req.flash('error',err);
 
-        return;
+        return res.redirect('back'); 
+        
     }
 }
