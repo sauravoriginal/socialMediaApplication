@@ -1,5 +1,7 @@
 //import user model
 const User = require('../models/user');
+const fs = require('fs');
+const path = require('path');
 module .exports.profile =async (req,res)=>{
     const user = await User.findById(req.params.id);
     if(user){
@@ -23,13 +25,20 @@ module .exports.profile =async (req,res)=>{
             user.name = req.body.name;
             user.email = req.body.email;
             if(req.file){
+                //remove if any avatar exist
+                if(user.avatar){ // tofix later
+                    fs.unlinkSync(path.join(__dirname,'..',user.avatar));
+                }
                 //this is just saving the path of uploaded file into the avatar field in the user
                user.avatar = User.avatarPath + '/' + req.file.filename
             }
             user.save();
             req.flash('success','your profile has been updated !');
             return res.redirect('back');
-        })
+        }
+        );
+        const updateOtherDetails = await User.findByIdAndUpdate(req.params.id,req.body);
+
         
         
     }else{
