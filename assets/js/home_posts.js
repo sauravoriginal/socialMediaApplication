@@ -70,5 +70,11 @@
     })
   }
 
+  //method to create comment in DOM todo later
+
+  
+  //method to delete comment in DOM todo later
+ 
+
   createPost();
 }
