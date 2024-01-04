@@ -9,6 +9,7 @@ module .exports.home =async (req,res)=>{
         //populate the user of each post(by doing popultae 
         // we have whole user object instead of only userobejct id)
         const posts = await Post.find({})
+        .sort('-createdAt') //given by mongodb
         .populate('user')
         //populate comments and user of comment
         .populate({
