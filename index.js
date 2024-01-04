@@ -32,6 +32,9 @@ app.use(cookieParser());
 
 //// before routes i.e before views we need static files to be accessed
 app.use(express.static('./assets'));
+// mnake the uploads path availabe to the browser
+app.use('/uploads',express.static(__dirname+'/uploads'));
+
 // before routes i.e before views we need layouts
 app.use(expressEjsLayouts);
 //extract the style from sub pages into layout
