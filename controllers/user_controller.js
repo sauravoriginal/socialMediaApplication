@@ -15,10 +15,26 @@ module .exports.profile =async (req,res)=>{
         console.log("inside update function");
         if(req.user.id == req.params.id){
         // const {name,email} = req.body;
-        const user = await User.findByIdAndUpdate(req.params.id,req.body);
-         req.flash('success','your profile has been updated !');
-           return res.redirect('back');
+        // const user = await User.findByIdAndUpdate(req.params.id,req.body);
+        // we cannot use now above line(req.body) as form contains multipart/form-data
+        const user = await User.findById(req.params.id);
+        User.uploadedAvatar(req,res,function(err){
+            if(err){console.log("Error in multer",err);}
+            user.name = req.body.name;
+            user.email = req.body.email;
+            if(req.file){
+                //this is just saving the path of uploaded file into the avatar field in the user
+               user.avatar = User.avatarPath + '/' + req.file.filename
+            }
+            user.save();
+            req.flash('success','your profile has been updated !');
+            return res.redirect('back');
+        })
         
+        
+    }else{
+        req.flash('error','Unauthorize');
+    return res.redirect('back');    
     }
  }catch(err){
     req.flash('error',err);

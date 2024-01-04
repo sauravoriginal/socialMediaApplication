@@ -34,11 +34,16 @@ let storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix)
+      cb(null, file.fieldname + '-' + uniqueSuffix) // filename will be "avatar-uniqueSuffix"
     }
   })
   
-//   const upload = multer({ storage: storage });
+  // define static methods
+  userSchema.statics.uploadedAvatar = multer({ storage: storage }).single('avatar');
+  userSchema.statics.avatarPath = AVATAR_PATH; // to use AVATAR_PATH when importing User
+  
+
+
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
