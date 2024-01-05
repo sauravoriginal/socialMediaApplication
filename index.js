@@ -11,6 +11,8 @@ const session = require('express-session');
 const passport = require('passport');
 // import passport local starategey
 const passportLocal = require('./config/passport-local-stragegy.js');
+// import passport jwt startegy
+const passportJWT =  require('./config/passport-jwt-strategy.js');
 // import mongo store to reduce the session time out for cookie or server restart
 const MongoStore= require('connect-mongo');
 // for saas middleware
