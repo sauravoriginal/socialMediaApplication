@@ -1,6 +1,8 @@
-//api/v1/index.js
-const express= require('express') ;
-const router = express.Router();
+const express= require('express');
+const router=express.Router();
+
 router.use('/posts',require('./posts'));
+router.use('/users',require('./users'));
+
 
 module.exports = router;
