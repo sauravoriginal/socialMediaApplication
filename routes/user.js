@@ -20,7 +20,13 @@ router.post('/create-session',passport.authenticate(
 // on sign-out
 router.get('/sign-out',userController.destroySession);
 
-// any further routes aftter localhost:8000/user  will be here
+//
+router.get('/auth/google',passport.authenticate('google',{scope:['profile','email']}));
+
+router.get('/auth/google/callback', passport.authenticate('google', {
+    failureRedirect: '/users/sign-in'
+}),userController.createSession
+);
 
 
 module.exports = router;

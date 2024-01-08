@@ -2,6 +2,8 @@
 const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
+const flash = require('connect-flash');
+
 module .exports.profile =async (req,res)=>{
     const user = await User.findById(req.params.id);
     if(user){

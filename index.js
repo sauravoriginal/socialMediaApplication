@@ -13,6 +13,8 @@ const passport = require('passport');
 const passportLocal = require('./config/passport-local-stragegy.js');
 // import passport jwt startegy
 const passportJWT =  require('./config/passport-jwt-strategy.js');
+// import passport google auth strategy
+const passportGoogle = require('./config/passport-google-oauth2-strategy.js');
 // import mongo store to reduce the session time out for cookie or server restart
 const MongoStore= require('connect-mongo');
 // for saas middleware
