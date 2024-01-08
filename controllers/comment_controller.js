@@ -1,7 +1,8 @@
 const Comment = require('../models/comment');
 const Post = require('../models/post');
-const { findById } = require('../models/user');
-
+const commentsMailer = require('../mailers/comments_mailer');
+const queue = require('../config/kue');
+const commetEmailWorker = require('../workers/comment_email_worker');
 module .exports.create =async (req,res)=>{
     try{
         //find the post with postId
@@ -17,7 +18,19 @@ module .exports.create =async (req,res)=>{
                 
                   // adding comment to the post
                   post.comments.push(comment); // given by mongodb
-                  post.save();// is called whenever i am updating something   
+                  await post.save();// is called whenever i am updating something 
+                  console.log(post.comments);
+                  await comment.populate('user', 'name email');  
+                  // commentsMailer.newComment(comment);
+            let job = queue.create('emails',comment).save(function(err){
+                if(err){
+                console.log('Error in sending to the queue',err)
+                return;
+              }
+              console.log('job enqueued',job.id);
+  
+              });
+        
                   req.flash('success','Comment added sucessfully !');
                   return res.redirect('/');
 
