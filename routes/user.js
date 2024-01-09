@@ -28,5 +28,11 @@ router.get('/auth/google/callback', passport.authenticate('google', {
 }),userController.createSession
 );
 
+// for forgot password
+router.get('/forgot-password',userController.forgotPassword);
+router.post('/reset-password-link',userController.sendResetLinkToMail);
+router.get('/reset-password',userController.resetPassword);
+router.post('/reset-password',userController.changePassword);
+
 
 module.exports = router;
