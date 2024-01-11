@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
         type:"String",
         
     },
+    // for forgetpassword session expiry
+    passwordEditAllow:{
+        type:Date,
+    },
 },{
     timestamps:true
 });

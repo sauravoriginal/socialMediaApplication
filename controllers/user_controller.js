@@ -144,7 +144,9 @@ module.exports.sendResetLinkToMail = async (req, res) => {
                 const sendMail = await forgetPasswordMailer.forgetPassword(req.body.email,emailBody);
                 console.log('sendMail:', sendMail);
                 // req.flash('success', 'reset link has been sent to your gmail');
-
+               //after sedding mail set mail expiry-time
+               user.passwordEditAllow = new Date();
+               await user.save();
                 return res.render('reset_through_gmail', {
                     title: "Reset-Link",
                 });
@@ -164,7 +166,6 @@ module.exports.sendResetLinkToMail = async (req, res) => {
     }
 };
 
-// for reset passwword
 // for reset password
 module.exports.resetPassword = async (req, res) => {
     try {
@@ -191,8 +192,8 @@ module.exports.resetPassword = async (req, res) => {
 };
 
 // change password
+// change password
 module.exports.changePassword = async (req, res) => {
-
     try {
         const userId = req.query.user_id;
 
@@ -202,12 +203,22 @@ module.exports.changePassword = async (req, res) => {
         const user = await User.findOne({ _id: userId });
 
         if (user) {
-              if (password == confirmPassword) {
+            const currentDate = new Date(); // Corrected line
+            const initialDate = user.passwordEditAllow; 
+            const diff =  initialDate.getMinutes()-currentDate.getMinutes(); // Corrected line
+            console.log('****diff in time is ', diff);
+
+            if (password === confirmPassword && diff <= 2) {
                 console.log("checking password");
                 user.password = password;
+                user.passwordEditAllow = currentDate; // Corrected line
                 await user.save();
-                req.flash('success', 'Password changed sucessfully !');
+                req.flash('success', 'Password changed successfully!');
                 return res.redirect('/users/sign-in');
+            } else {
+                req.flash('error', 'Password mismatch or time expired');
+                console.log("Password mismatch or time expired");
+                return res.redirect('back');
             }
         } else {
             req.flash('error', 'User does not exist or some issue');
@@ -220,4 +231,5 @@ module.exports.changePassword = async (req, res) => {
         return res.redirect('/users/sign-in');
     }
 };
+
 
