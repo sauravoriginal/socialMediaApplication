@@ -3,6 +3,8 @@ const Post = require('../models/post');
 const commentsMailer = require('../mailers/comments_mailer');
 const queue = require('../config/kue');
 const commetEmailWorker = require('../workers/comment_email_worker');
+const Like = require('../models/like');
+
 module .exports.create =async (req,res)=>{
     try{
         //find the post with postId
@@ -30,6 +32,16 @@ module .exports.create =async (req,res)=>{
               console.log('job enqueued',job.id);
   
               });
+              if (req.xhr){
+                
+    
+                return res.status(200).json({
+                    data: {
+                        comment: comment
+                    },
+                    message: "Comment created!"
+                });
+            }
         
                   req.flash('success','Comment added sucessfully !');
                   return res.redirect('/');
@@ -60,9 +72,25 @@ module.exports.destroy =async(req,res)=>{
                 // for deleting comment id from  comment array inside post
                 // store post id to fetch commentid from array
                 let postId =comment.post;
-                await comment.deleteOne(); // delete this comment
+                await comment.deleteOne({ _id: req.params.id }); // delete this comment
                 // delete comment id from array and update the post
                const post= await Post.findByIdAndUpdate(postId,{$pull:{comments:req.params.id}});
+               // CHANGE :: destroy the associated likes for this comment
+            await Like.deleteMany({likeable: comment._id, onModel: 'Comment'});
+              // send the comment id which was deleted back to the views
+             // send the comment id which was deleted back to the views
+            if (req.xhr){
+                return res.status(200).json({
+                    data: {
+                        comment_id: req.params.id
+                    },
+                    message: "Comment deleted"
+                });
+            }
+
+
+
+
                req.flash('success','Comment deleted sucessfully !');
 
               
