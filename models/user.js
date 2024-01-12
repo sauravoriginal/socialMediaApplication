@@ -27,6 +27,13 @@ const userSchema = new mongoose.Schema({
     passwordEditAllow:{
         type:Date,
     },
+    // for friendship
+    friendship:[
+     {
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Freindship'
+     }   
+    ]
 },{
     timestamps:true
 });

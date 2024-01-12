@@ -34,5 +34,8 @@ router.post('/reset-password-link',userController.sendResetLinkToMail);
 router.get('/reset-password',userController.resetPassword);
 router.post('/reset-password',userController.changePassword);
 
+// to add friendship
+router.post('/friend-requets/',userController.addFriendship);
+
 
 module.exports = router;

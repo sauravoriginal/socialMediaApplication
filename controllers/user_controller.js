@@ -4,13 +4,33 @@ const fs = require('fs');
 const path = require('path');
 const flash = require('connect-flash');
 const forgetPasswordMailer = require('../mailers/forget_password_mailers');
+const Friendship = require('../models/friendship');
 
 module .exports.profile =async (req,res)=>{
-    const user = await User.findById(req.params.id);
+    let friendshipId;
+    const profile_user = await User.findById(req.params.id);
+    const user = await User.findById(req.user.id);
+    if(!user || !profile_user){
+        req.flash('error', 'user not found');
+        return res.redirect('/');
+    }
+     // check for freindship exist
+     const commonFriendships = user.friendship.filter(friendship1 =>
+        profile_user.friendship.some(friendship2 =>
+          friendship1.equals(friendship2)  
+        )
+      );
+      console.log("commonFriendships",commonFriendships[0]);
+        // check for freindship exist
+        if(commonFriendships.length > 0){
+            // profile user is already added as friend
+            friendshipId = commonFriendships[0];
+      }
     if(user){
         return res.render('user_profile.ejs',{
             title: "User profile",
-            profile_user: user
+            profile_user: profile_user,
+            friendshipId:friendshipId
        });
     }
   }
@@ -232,4 +252,66 @@ module.exports.changePassword = async (req, res) => {
     }
 };
 
+// to add friendship
+module.exports.addFriendship = async (req, res) => {
+    try {
+      const fromUser = req.query.fromUser;
+      const toUser = req.query.toUser;
+     const friendshipId= req.query.friendshipId;
+      const user1 = await User.findById(fromUser);
+      const user2 = await User.findById(toUser);
+  
+      if (!user1 || !user2) {
+        req.flash('error', 'Either user not found.');
+        return res.redirect('back');
+      }
+     // check if already added as friend
+      if (friendshipId !== undefined && friendshipId !== null && friendshipId !== '') {
+
+      const friendship = await Friendship.findById(friendshipId);
+      if (friendship) {
+        // delete friensdhip from friensdshipSchema
+        await friendship.deleteOne();
+      }
+  
+      // remove friendshipId from friendship inside both user
+      user1.friendship.pull(friendshipId);
+      await user1.save();
+  
+      user2.friendship.pull(friendshipId);
+      await user2.save();
+  
+      req.flash('success', 'Friendship removed successfully!');
+      return res.redirect('back');
+        
+      }
+  
+      const friendship = await Friendship.create({
+        fromUser: fromUser,
+        toUser: toUser
+      });
+  
+      if (friendship) {
+        user1.friendship.push(friendship);
+        await user1.save();
+        user2.friendship.push(friendship);
+        await user2.save();
+  
+        req.flash('success', 'Friend added successfully!');
+        return res.redirect('back');
+      } else {
+        req.flash('error', 'Internal server error. Please try again later.');
+        return res.redirect('back');
+      }
+    } catch (err) {
+      console.error("Error in adding friend:", err);
+      req.flash('error', 'Internal server error. Please try again later.');
+      return res.redirect('back');
+    }
+  };
+  
+  
+
+
+  
 

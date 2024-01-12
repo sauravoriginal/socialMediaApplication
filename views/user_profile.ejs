@@ -13,4 +13,19 @@
 <% } else { %>
     <p>Name: <%= profile_user.name %></p>
     <p>Email: <%= profile_user.email %></p>
+     
+    <form action="/users/friend-requets/?fromUser=<%= user.id%>&toUser=<%= profile_user.id%>&friendshipId=<%= friendshipId%>" method="post">
+        <% if (friendshipId) { %>
+            <input type="submit"  value="Remove Friend">
+
+
+        <% } else { %>
+            <input type="submit"  value="Add friend">
+
+            <% } %>
+
+         
+    </form>
+
+
 <% } %>
