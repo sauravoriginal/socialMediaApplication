@@ -25,9 +25,10 @@ const customMware = require('./config/middleware.js');
 // set up the  chat server to be used with socket.io
 const chatServer = require('http').Server(app);
 const chatSockets = require('./config/chat_sockets.js').chatSockets(chatServer);
-chatServer.listen(3000);
+chatServer.listen(5000);
 console.log("chatserver is listning on port 3000");
 
+  
 
 
 app.use(sassMiddleware({
@@ -92,6 +93,6 @@ app.use(customMware.setFlash);
 // to use index routes as base/starting route
 app.use('/',require('./routes/index.js'));
 
-app.listen(5000, () => {
-    console.log('Server started at http://localhost:5000');
+app.listen(8000, () => {
+    console.log('Server started at http://localhost:8000');
 });
