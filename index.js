@@ -1,4 +1,6 @@
 const express= require('express') ;
+//import environment file
+const env = require('./config/environment.js');
 const expressEjsLayouts = require('express-ejs-layouts');
 const expressLayouts =require('express-ejs-layouts');
 const app = express();
@@ -29,14 +31,14 @@ const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
 chatServer.listen(5000);
 console.log('chat server is listening on port 5000');
 
-
+const path = require('path');
   
 
 
 app.use(sassMiddleware({
     /* Options */
-    src: './assets/scss',
-    dest: './assets/css',
+    src: path.join(__dirname,env.asset_path,'scss'),
+    dest: path.join(__dirname,env.asset_path,'css'),
     debug:true,
     outputStyle: 'extended',
     prefix:'/css'
@@ -46,7 +48,7 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 
 //// before routes i.e before views we need static files to be accessed
-app.use(express.static('./assets'));
+app.use(express.static(env.asset_path));
 // mnake the uploads path availabe to the browser
 app.use('/uploads',express.static(__dirname+'/uploads'));
 
@@ -66,7 +68,7 @@ app.set('views', './views'); // same as path.join for html page to send
 app.use(session({
     name:'codial',
     // TODO change the secrete  before deploymet in production code
-    secret:'blasomething', //to encode 
+    secret:env.session_cookie_key, //to encode 
     saveUninitialized:false,
     resave:false,
     cookie:{

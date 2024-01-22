@@ -1,6 +1,6 @@
 const User = require('../../../models/user');
 const jwt = require('jsonwebtoken');
-
+const env = require('../../../config/environment')
 
 module.exports.createSession=async function(req,res){
   try{
@@ -14,7 +14,7 @@ module.exports.createSession=async function(req,res){
        return res.json(200,{
         message: "Sign in sucessfully,here is your token please keep it safe",
         data: {
-            token:jwt.sign(user.toJSON(),'codeial',{expiresIn :'100000'})
+            token:jwt.sign(user.toJSON(),env.jwt_secret,{expiresIn :'100000'})
         }
         // token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
         //eyJfaWQiOiI2NThkMzQ4MWMyNmNjZmJkZWRhYTRiZTkiLCJlbWFpbCI6InNhdXJhdm9yaWdpbmFsMjExMEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IjEiLCJuYW1lIjoiU2hhc2hhbmsgU2F1cmF2cyIsImNyZWF0ZWRBdCI6IjIwMjMtMTItMjhUMDg6NDA6MzMuMjQyWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDEtMDRUMTg6MjE6NDYuNTE5WiIsIl9fdiI6MCwiYXZhdGFyIjoiXFx1cGxvYWRzXFx1c2Vyc1xcYXZhdGFycy9hdmF0YXItMTcwNDM5MjUwNjQ5MS0yMTg4ODIyNTEiLCJpYXQiOjE3MDQ0NTk1MDYsImV4cCI6MTcwNDQ1OTUxNn0.
