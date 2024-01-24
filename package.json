@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "prod_start": "set NODE_ENV=production && nodemon index.js"
   },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
