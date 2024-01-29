@@ -1,6 +1,7 @@
-const express= require('express') ;
+const express= require('express');
 //import environment file
 const env = require('./config/environment.js');
+const logger = require('morgan');
 const expressEjsLayouts = require('express-ejs-layouts');
 const expressLayouts =require('express-ejs-layouts');
 const app = express();
@@ -34,15 +35,17 @@ console.log('chat server is listening on port 5000');
 const path = require('path');
   
 
+if(env.name=='development'){
+    app.use(sassMiddleware({
+        /* Options */
+        src: path.join(__dirname,env.asset_path,'scss'),
+        dest: path.join(__dirname,env.asset_path,'css'),
+        debug:true,
+        outputStyle: 'extended',
+        prefix:'/css'
+    }));
+}
 
-app.use(sassMiddleware({
-    /* Options */
-    src: path.join(__dirname,env.asset_path,'scss'),
-    dest: path.join(__dirname,env.asset_path,'css'),
-    debug:true,
-    outputStyle: 'extended',
-    prefix:'/css'
-}));
 //for cookie parser
 app.use(express.urlencoded());
 app.use(cookieParser());
@@ -52,6 +55,7 @@ app.use(express.static(env.asset_path));
 // mnake the uploads path availabe to the browser
 app.use('/uploads',express.static(__dirname+'/uploads'));
 
+app.use(logger(env.morgan.mode,env.morgan.options));
 // before routes i.e before views we need layouts
 app.use(expressEjsLayouts);
 //extract the style from sub pages into layout

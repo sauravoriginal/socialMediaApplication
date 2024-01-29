@@ -1,3 +1,13 @@
+const fs = require('fs');
+const rfs = require('rotating-file-stream');
+const path = require('path');
+
+const logDirectory = path.join(__dirname, '../production_logs');
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+const accessLogStream = rfs.createStream('access.log',{
+    interval:'1d',
+    path:logDirectory
+});
 const development = {
     name:'development',
     asset_path:'./assets',
@@ -17,8 +27,14 @@ const development = {
     google_clientSecret:"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",
     google_callbackURL: "http://localhost:5000/users/auth/google/callback",
     jwt_secret:'codeial',
+    morgan:{
+        mode:'dev',
+        options:{stream:accessLogStream}
+    }
     
 }
+
+
 
 
 const production = {
@@ -39,7 +55,11 @@ const production = {
     google_clientID:process.env.SOCIALMEDIA_GOOGLE_CLIENTID,
     google_clientSecret:process.env.SOCIALMEDIA_GOOGLE_CLIENTSECRET,
     google_callbackURL:process.env.SOCIALMEDIA_GOOGLE_CALLBACKURL,
-    jwt_secret:process.env.SOCIALMEDIA_JWT_SECRET
+    jwt_secret:process.env.SOCIALMEDIA_JWT_SECRET,
+    morgan:{
+        mode:'combined',
+        options:{stream:accessLogStream}
+    }
  
 }
 
